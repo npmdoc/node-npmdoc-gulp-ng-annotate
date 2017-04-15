@@ -1,11 +1,13 @@
 # api documentation for  [gulp-ng-annotate (v2.0.0)](https://github.com/Kagami/gulp-ng-annotate)  [![npm package](https://img.shields.io/npm/v/npmdoc-gulp-ng-annotate.svg?style=flat-square)](https://www.npmjs.org/package/npmdoc-gulp-ng-annotate) [![travis-ci.org build-status](https://api.travis-ci.org/npmdoc/node-npmdoc-gulp-ng-annotate.svg)](https://travis-ci.org/npmdoc/node-npmdoc-gulp-ng-annotate)
 #### Add angularjs dependency injection annotations with ng-annotate
 
-[![NPM](https://nodei.co/npm/gulp-ng-annotate.png?downloads=true)](https://www.npmjs.com/package/gulp-ng-annotate)
+[![NPM](https://nodei.co/npm/gulp-ng-annotate.png?downloads=true&downloadRank=true&stars=true)](https://www.npmjs.com/package/gulp-ng-annotate)
 
-[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/screen-capture.buildNpmdoc.browser._2Fhome_2Ftravis_2Fbuild_2Fnpmdoc_2Fnode-npmdoc-gulp-ng-annotate_2Ftmp_2Fbuild_2Fapidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build..beta..travis-ci.org/apidoc.html)
+[![apidoc](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/screenCapture.buildCi.browser.apidoc.html.png)](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/apidoc.html)
 
-![package-listing](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/screen-capture.npmPackageListing.svg)
+![npmPackageListing](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/screenCapture.npmPackageListing.svg)
+
+![npmPackageDependencyTree](https://npmdoc.github.io/node-npmdoc-gulp-ng-annotate/build/screenCapture.npmPackageDependencyTree.svg)
 
 
 
@@ -54,13 +56,11 @@
     "main": "index.js",
     "maintainers": [
         {
-            "name": "kagami",
-            "email": "kagami@genshiken.org"
+            "name": "kagami"
         }
     ],
     "name": "gulp-ng-annotate",
     "optionalDependencies": {},
-    "readme": "ERROR: No README data found!",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/Kagami/gulp-ng-annotate.git"
@@ -77,10 +77,97 @@
 # <a name="apidoc.tableOfContents"></a>[table of contents](#apidoc.tableOfContents)
 
 #### [module gulp-ng-annotate](#apidoc.module.gulp-ng-annotate)
+1.  [function <span class="apidocSignatureSpan"></span>gulp-ng-annotate (options)](#apidoc.element.gulp-ng-annotate.gulp-ng-annotate)
+1.  [function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString ()](#apidoc.element.gulp-ng-annotate.toString)
 
 
 
 # <a name="apidoc.module.gulp-ng-annotate"></a>[module gulp-ng-annotate](#apidoc.module.gulp-ng-annotate)
+
+#### <a name="apidoc.element.gulp-ng-annotate.gulp-ng-annotate"></a>[function <span class="apidocSignatureSpan"></span>gulp-ng-annotate (options)](#apidoc.element.gulp-ng-annotate.gulp-ng-annotate)
+- description and source-code
+```javascript
+gulp-ng-annotate = function (options) {
+  options = options || {};
+  if (!options.remove) {
+    options = merge({add: true}, options);
+  };
+
+  return through.obj(function (file, enc, done) {
+    // When null just pass through.
+    if (file.isNull()) {
+      this.push(file);
+      return done();
+    }
+
+    var opts = merge({map: !!file.sourceMap}, options);
+    if (opts.map) {
+      if (typeof opts.map === "boolean") {
+        opts.map = {};
+      }
+      if (file.path) {
+        opts.map.inFile = file.relative;
+      }
+    }
+
+    // Buffer input.
+    if (file.isBuffer()) {
+      try {
+        file.contents = transform(file, file.contents, opts);
+      } catch (e) {
+        this.emit("error", e);
+        return done();
+      }
+    // Dealing with stream input.
+    } else {
+      file.contents = file.contents.pipe(new BufferStreams(function(err, buf, cb) {
+        if (err) return cb(new gutil.PluginError(PLUGIN_NAME, err));
+        try {
+          var transformed = transform(file, buf, opts)
+        } catch (e) {
+          return cb(e);
+        }
+        cb(null, transformed);
+      }));
+    }
+
+    this.push(file);
+    done();
+  });
+}
+```
+- example usage
+```shell
+n/a
+```
+
+#### <a name="apidoc.element.gulp-ng-annotate.toString"></a>[function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString ()](#apidoc.element.gulp-ng-annotate.toString)
+- description and source-code
+```javascript
+toString = function () {
+    return toString;
+}
+```
+- example usage
+```shell
+...
+var merge = require("merge");
+var BufferStreams = require("bufferstreams");
+
+var PLUGIN_NAME = "gulp-ng-annotate";
+
+// Function which handle logic for both stream and buffer modes.
+function transform(file, input, opts) {
+var res = ngAnnotate(input.toString(), opts);
+if (res.errors) {
+  var filename = "";
+  if (file.path) {
+    filename = file.relative + ": ";
+  }
+  throw new gutil.PluginError(PLUGIN_NAME, filename + res.errors.join("\n"));
+}
+...
+```
 
 
 
