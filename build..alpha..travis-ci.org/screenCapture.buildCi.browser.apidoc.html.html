@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/Kagami/gulp-ng-annotate"
-
-    >gulp-ng-annotate (v2.0.0)</a>
+    <a href="https://github.com/Kagami/gulp-ng-annotate">gulp-ng-annotate (v2.0.0)</a>
 </h1>
 <h4>Add angularjs dependency injection annotations with ng-annotate</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-ng-annotate">module gulp-ng-annotate</a><ol>
 
@@ -109,7 +102,7 @@
 
     var opts = merge({map: !!file.sourceMap}, options);
     if (opts.map) {
-      if (typeof opts.map === &#x22;boolean&#x22;) {
+      if (typeof opts.map === "boolean") {
         opts.map = {};
       }
       if (file.path) {
@@ -122,7 +115,7 @@
       try {
         file.contents = transform(file, file.contents, opts);
       } catch (e) {
-        this.emit(&#x22;error&#x22;, e);
+        this.emit("error", e);
         return done();
       }
     // Dealing with stream input.
@@ -158,20 +151,20 @@
     return toString;
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">...
-var merge = require(&#x22;merge&#x22;);
-var BufferStreams = require(&#x22;bufferstreams&#x22;);
+var merge = require("merge");
+var BufferStreams = require("bufferstreams");
 
-var PLUGIN_NAME = &#x22;gulp-ng-annotate&#x22;;
+var PLUGIN_NAME = "gulp-ng-annotate";
 
 // Function which handle logic for both stream and buffer modes.
 function transform(file, input, opts) {
 var res = ngAnnotate(input.<span class="apidocCodeKeywordSpan">toString</span>(), opts);
 if (res.errors) {
-  var filename = &#x22;&#x22;;
+  var filename = "";
   if (file.path) {
-    filename = file.relative + &#x22;: &#x22;;
+    filename = file.relative + ": ";
   }
-  throw new gutil.PluginError(PLUGIN_NAME, filename + res.errors.join(&#x22;\n&#x22;));
+  throw new gutil.PluginError(PLUGIN_NAME, filename + res.errors.join("\n"));
 }
 ...</pre></li>
     </ul>
@@ -185,3 +178,4 @@ if (res.errors) {
     ]
 </div>
 </div>
+</body></html>

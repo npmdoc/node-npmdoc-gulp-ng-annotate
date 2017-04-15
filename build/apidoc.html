@@ -61,12 +61,121 @@
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-ng-annotate">module gulp-ng-annotate</a><ol>
 
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-ng-annotate.gulp-ng-annotate">
+            function <span class="apidocSignatureSpan"></span>gulp-ng-annotate
+            <span class="apidocSignatureSpan">(options)</span>
+            </a>
+
+        </li>
+
+        <li>
+
+            <a class="apidocElementLiA" href="#apidoc.element.gulp-ng-annotate.toString">
+            function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString
+            <span class="apidocSignatureSpan">()</span>
+            </a>
+
+        </li>
+
     </ol></li>
 
 </ol></div>
 
 <div class="apidocSectionDiv">
 <h1><a href="#apidoc.module.gulp-ng-annotate" id="apidoc.module.gulp-ng-annotate">module gulp-ng-annotate</a></h1>
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-ng-annotate.gulp-ng-annotate" id="apidoc.element.gulp-ng-annotate.gulp-ng-annotate">
+        function <span class="apidocSignatureSpan"></span>gulp-ng-annotate
+        <span class="apidocSignatureSpan">(options)</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">gulp-ng-annotate = function (options) {
+  options = options || {};
+  if (!options.remove) {
+    options = merge({add: true}, options);
+  };
+
+  return through.obj(function (file, enc, done) {
+    // When null just pass through.
+    if (file.isNull()) {
+      this.push(file);
+      return done();
+    }
+
+    var opts = merge({map: !!file.sourceMap}, options);
+    if (opts.map) {
+      if (typeof opts.map === &#x22;boolean&#x22;) {
+        opts.map = {};
+      }
+      if (file.path) {
+        opts.map.inFile = file.relative;
+      }
+    }
+
+    // Buffer input.
+    if (file.isBuffer()) {
+      try {
+        file.contents = transform(file, file.contents, opts);
+      } catch (e) {
+        this.emit(&#x22;error&#x22;, e);
+        return done();
+      }
+    // Dealing with stream input.
+    } else {
+      file.contents = file.contents.pipe(new BufferStreams(function(err, buf, cb) {
+        if (err) return cb(new gutil.PluginError(PLUGIN_NAME, err));
+        try {
+          var transformed = transform(file, buf, opts)
+        } catch (e) {
+          return cb(e);
+        }
+        cb(null, transformed);
+      }));
+    }
+
+    this.push(file);
+    done();
+  });
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">n/a</pre></li>
+    </ul>
+
+
+
+    <h2>
+        <a href="#apidoc.element.gulp-ng-annotate.toString" id="apidoc.element.gulp-ng-annotate.toString">
+        function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString
+        <span class="apidocSignatureSpan">()</span>
+        </a>
+    </h2>
+    <ul>
+    <li>description and source-code<pre class="apidocCodePre">toString = function () {
+    return toString;
+}</pre></li>
+    <li>example usage<pre class="apidocCodePre">...
+var merge = require(&#x22;merge&#x22;);
+var BufferStreams = require(&#x22;bufferstreams&#x22;);
+
+var PLUGIN_NAME = &#x22;gulp-ng-annotate&#x22;;
+
+// Function which handle logic for both stream and buffer modes.
+function transform(file, input, opts) {
+var res = ngAnnotate(input.<span class="apidocCodeKeywordSpan">toString</span>(), opts);
+if (res.errors) {
+  var filename = &#x22;&#x22;;
+  if (file.path) {
+    filename = file.relative + &#x22;: &#x22;;
+  }
+  throw new gutil.PluginError(PLUGIN_NAME, filename + res.errors.join(&#x22;\n&#x22;));
+}
+...</pre></li>
+    </ul>
+
 
 </div>
 
