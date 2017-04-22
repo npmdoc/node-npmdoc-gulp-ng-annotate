@@ -70,15 +70,6 @@
 
         </li>
 
-        <li>
-
-            <a class="apidocElementLiA" href="#apidoc.element.gulp-ng-annotate.toString">
-            function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString
-            <span class="apidocSignatureSpan">()</span>
-            </a>
-
-        </li>
-
     </ol></li>
 
 </ol></div>
@@ -143,37 +134,6 @@
   });
 }</pre></li>
     <li>example usage<pre class="apidocCodePre">n/a</pre></li>
-    </ul>
-
-
-
-    <h2>
-        <a href="#apidoc.element.gulp-ng-annotate.toString" id="apidoc.element.gulp-ng-annotate.toString">
-        function <span class="apidocSignatureSpan">gulp-ng-annotate.</span>toString
-        <span class="apidocSignatureSpan">()</span>
-        </a>
-    </h2>
-    <ul>
-    <li>description and source-code<pre class="apidocCodePre">toString = function () {
-    return toString;
-}</pre></li>
-    <li>example usage<pre class="apidocCodePre">...
-var merge = require(&#x22;merge&#x22;);
-var BufferStreams = require(&#x22;bufferstreams&#x22;);
-
-var PLUGIN_NAME = &#x22;gulp-ng-annotate&#x22;;
-
-// Function which handle logic for both stream and buffer modes.
-function transform(file, input, opts) {
-var res = ngAnnotate(input.<span class="apidocCodeKeywordSpan">toString</span>(), opts);
-if (res.errors) {
-  var filename = &#x22;&#x22;;
-  if (file.path) {
-    filename = file.relative + &#x22;: &#x22;;
-  }
-  throw new gutil.PluginError(PLUGIN_NAME, filename + res.errors.join(&#x22;\n&#x22;));
-}
-...</pre></li>
     </ul>
 
 
